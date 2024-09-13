@@ -1,0 +1,195 @@
+#!/bin/bash
+
+# Command version
+VERSION="v0.1.0"
+
+# Function to display the help menu
+display_help() {
+  echo "Usage: aakash [option]"
+  echo ""
+  echo "Options:"
+  echo "--version             Show the command version"
+  echo "--help                Show this help menu"
+  echo "status                Display system uptime and load"
+  echo "services              List all running system services"
+  echo "processes             List all running processes"
+  echo "check-disk            Show disk usage"
+  echo "service list          List all active system services"
+  echo "service start <name>  Start a specific service"
+  echo "service stop <name>   Stop a specific service"
+  echo "system load           Display current system load averages"
+  echo "disk usage            Show disk usage by partition"
+  echo "process monitor       Monitor system processes in real-time"
+  echo "logs analyze          Analyze recent critical system logs"
+  echo "backup <path>         Backup system files from a specified path"
+}
+
+# Function to display the command version
+display_version() {
+  echo "aakash version $VERSION"
+}
+
+# Function to check system uptime and load
+system_status() {
+  echo "System Uptime and Load:"
+  uptime
+}
+
+# Function to list all running services
+list_services() {
+  echo "Running Services:"
+  systemctl list-units --type=service --state=running
+}
+
+# Function to list all running processes
+list_processes() {
+  echo "Running Processes:"
+  ps aux
+}
+
+# Function to check disk usage
+check_disk_usage() {
+  echo "Disk Usage:"
+  df -h
+}
+
+# Function to list active services
+list_running_services() {
+  echo "Listing all active services:"
+  systemctl list-units --type=service --state=running
+}
+
+# Function to show system load averages
+view_system_load() {
+  echo "Current system load averages:"
+  uptime
+}
+
+# Function to start a specific service
+start_service() {
+  local service_name="$1"
+  echo "Starting service: $service_name"
+  sudo systemctl start "$service_name" && echo "Service $service_name started successfully." || echo "Failed to start $service_name."
+}
+
+# Function to stop a specific service
+stop_service() {
+  local service_name="$1"
+  echo "Stopping service: $service_name"
+  sudo systemctl stop "$service_name" && echo "Service $service_name stopped successfully." || echo "Failed to stop $service_name."
+}
+
+# New Function to monitor processes in real-time
+monitor_processes() {
+  echo "Monitoring system processes in real-time:"
+  top
+}
+
+# New Function to analyze recent critical logs
+analyze_system_logs() {
+  echo "Analyzing recent critical log entries:"
+  journalctl -p crit --since "24 hours ago"
+}
+
+# New Function to backup system files using rsync
+backup_system_files() {
+  local backup_path="$1"
+  echo "Initiating backup for: $backup_path"
+  rsync -avh --progress "$backup_path" /backup/ && echo "Backup completed successfully." || echo "Backup failed."
+}
+
+# Main script logic to handle options
+
+# Check if only one argument is passed (for single-part commands like --help, --version, status, services, processes)
+if [[ $# -eq 1 ]]; then
+  case "$1" in
+    --version)
+      display_version
+      exit 0
+      ;;
+    --help)
+      display_help
+      exit 0
+      ;;
+    status)
+      system_status
+      exit 0
+      ;;
+    services)
+      list_services
+      exit 0
+      ;;
+    processes)
+      list_processes
+      exit 0
+      ;;
+    check-disk)
+      check_disk_usage
+      exit 0
+      ;;
+    *)
+      echo "Invalid option: $1"
+      echo "Use --help for usage information."
+      exit 1
+      ;;
+  esac
+fi
+
+# Handle two-part commands (e.g., service list, system load, disk usage, process monitor, logs analyze)
+if [[ $# -eq 2 ]]; then
+  case "$1 $2" in
+    "service list")
+      list_running_services
+      exit 0
+      ;;
+    "system load")
+      view_system_load
+      exit 0
+      ;;
+    "process monitor")
+      monitor_processes
+      exit 0
+      ;;
+    "logs analyze")
+      analyze_system_logs
+      exit 0
+      ;;
+    "disk usage")
+      check_disk_usage
+      exit 0
+      ;;
+    *)
+      echo "Invalid option: $1 $2"
+      echo "Use --help for usage information."
+      exit 1
+      ;;
+  esac
+fi
+
+# Handle three-part commands for service start/stop and backup system files
+if [[ $# -eq 3 ]]; then
+  case "$1 $2" in
+    "service start")
+      start_service "$3"
+      exit 0
+      ;;
+    "service stop")
+      stop_service "$3"
+      exit 0
+      ;;
+    "backup")
+      backup_system_files "$3"
+      exit 0
+      ;;
+    *)
+      echo "Invalid option: $1 $2"
+      echo "Use --help for usage information."
+      exit 1
+      ;;
+  esac
+fi
+
+# If no valid options are passed, show error and help
+echo "Invalid usage."
+echo "Use --help for usage information."
+exit 1
