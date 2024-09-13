@@ -1,4 +1,4 @@
-=# sysopctl - System Operations Control Script
+# sysopctl - System Operations Control Script
 
 ## Description
 `sysopctl` is a Bash script to manage system resources such as CPU, memory, and disk usage.
