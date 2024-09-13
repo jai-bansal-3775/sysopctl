@@ -22,3 +22,16 @@ Options:<br/>
 <pre>backup <path>         Backup system files from a specified path<br/></pre>
 
 
+![image](https://github.com/user-attachments/assets/75ab2794-cb61-493d-9d11-1d59bca4a080)
+
+![image](https://github.com/user-attachments/assets/04378fb2-4c39-467a-b5bc-f86387d63b81)
+
+![image](https://github.com/user-attachments/assets/8c482469-bad0-4737-adae-303d757d24cf)
+
+![image](https://github.com/user-attachments/assets/97deb712-98f5-411d-a73b-ba69ef513159)
+
+
+
+
+
+
